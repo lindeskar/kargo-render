@@ -1,0 +1,27 @@
+name: Kargo Render
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write # Optional, depending on your workflow
+
+jobs:
+  render-manifests:
+    name: Render and Commit Manifests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        targetBranch:
+          - env/dev
+          - env/stage
+          - env/prod
+    steps:
+      - name: Render and Commit Manifests
+        uses: akuity/kargo-render-action@v0.1.0-rc.40
+        with:
+          personalAccessToken: ${{ secrets.GITHUB_TOKEN }}
+          targetBranch: ${{ matrix.targetBranch }}
